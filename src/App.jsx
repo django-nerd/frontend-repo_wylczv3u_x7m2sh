@@ -1,73 +1,88 @@
-function App() {
+import { Routes, Route, Navigate, Link, useLocation } from 'react-router-dom'
+import { Home, PlusCircle, MessageSquareMore, ShoppingBag, User, Search, ArrowRight } from 'lucide-react'
+import Spline from '@splinetool/react-spline'
+import Onboarding from './screens/Onboarding'
+import Auth from './screens/Auth'
+import HomeFeed from './screens/HomeFeed'
+import ProductDetail from './screens/ProductDetail'
+import SellItem from './screens/SellItem'
+import Chat from './screens/Chat'
+import Orders from './screens/Orders'
+import Profile from './screens/Profile'
+import MobileShell from './components/MobileShell'
+
+function BottomNav() {
+  const location = useLocation()
+  const items = [
+    { to: '/home', label: 'Home', icon: Home },
+    { to: '/sell', label: 'Sell', icon: PlusCircle },
+    { to: '/chat', label: 'Chat', icon: MessageSquareMore },
+    { to: '/orders', label: 'Orders', icon: ShoppingBag },
+    { to: '/profile', label: 'Profile', icon: User },
+  ]
+
+  const hideOn = ['/','/auth']
+  const hidden = hideOn.includes(location.pathname)
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
-      {/* Subtle pattern overlay */}
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(59,130,246,0.05),transparent_50%)]"></div>
-
-      <div className="relative min-h-screen flex items-center justify-center p-8">
-        <div className="max-w-2xl w-full">
-          {/* Header with Flames icon */}
-          <div className="text-center mb-12">
-            <div className="inline-flex items-center justify-center mb-6">
-              <img
-                src="/flame-icon.svg"
-                alt="Flames"
-                className="w-24 h-24 drop-shadow-[0_0_25px_rgba(59,130,246,0.5)]"
-              />
-            </div>
-
-            <h1 className="text-5xl font-bold text-white mb-4 tracking-tight">
-              Flames Blue
-            </h1>
-
-            <p className="text-xl text-blue-200 mb-6">
-              Build applications through conversation
-            </p>
-          </div>
-
-          {/* Instructions */}
-          <div className="bg-slate-800/50 backdrop-blur-sm border border-blue-500/20 rounded-2xl p-8 shadow-xl mb-6">
-            <div className="flex items-start gap-4 mb-6">
-              <div className="flex-shrink-0 w-8 h-8 bg-blue-500 text-white rounded-lg flex items-center justify-center font-bold">
-                1
-              </div>
-              <div>
-                <h3 className="font-semibold text-white mb-1">Describe your idea</h3>
-                <p className="text-blue-200/80 text-sm">Use the chat panel on the left to tell the AI what you want to build</p>
-              </div>
-            </div>
-
-            <div className="flex items-start gap-4 mb-6">
-              <div className="flex-shrink-0 w-8 h-8 bg-blue-500 text-white rounded-lg flex items-center justify-center font-bold">
-                2
-              </div>
-              <div>
-                <h3 className="font-semibold text-white mb-1">Watch it build</h3>
-                <p className="text-blue-200/80 text-sm">Your app will appear in this preview as the AI generates the code</p>
-              </div>
-            </div>
-
-            <div className="flex items-start gap-4">
-              <div className="flex-shrink-0 w-8 h-8 bg-blue-500 text-white rounded-lg flex items-center justify-center font-bold">
-                3
-              </div>
-              <div>
-                <h3 className="font-semibold text-white mb-1">Refine and iterate</h3>
-                <p className="text-blue-200/80 text-sm">Continue the conversation to add features and make changes</p>
-              </div>
-            </div>
-          </div>
-
-          {/* Footer */}
-          <div className="text-center">
-            <p className="text-sm text-blue-300/60">
-              No coding required • Just describe what you want
-            </p>
-          </div>
-        </div>
-      </div>
+    <div className={`transition-all ${hidden ? 'opacity-0 pointer-events-none translate-y-6' : 'opacity-100'} `}>
+      <nav className="mx-auto w-full max-w-[430px] rounded-2xl bg-white/80 backdrop-blur supports-[backdrop-filter]:bg-white/60 shadow-[0_8px_30px_rgba(0,0,0,0.08)] border border-white/40">
+        <ul className="grid grid-cols-5 text-sm text-neutral-600">
+          {items.map(({ to, label, icon: Icon }) => {
+            const active = location.pathname === to
+            return (
+              <li key={to}>
+                <Link to={to} className="flex flex-col items-center gap-1 py-3">
+                  <div className={`rounded-full p-2 ${active ? 'bg-[#4A6CF7]/10 text-[#4A6CF7]' : 'text-neutral-600'}`}>
+                    <Icon size={20} />
+                  </div>
+                  <span className={`${active ? 'text-[#1F1F1F] font-medium' : ''}`}>{label}</span>
+                </Link>
+              </li>
+            )
+          })}
+        </ul>
+      </nav>
     </div>
   )
 }
 
-export default App
+export default function App() {
+  return (
+    <div className="min-h-screen bg-gradient-to-b from-[#F3F5F9] to-white text-[#1F1F1F]">
+      <div className="fixed inset-0 pointer-events-none">
+        <div className="absolute -top-32 left-1/2 -translate-x-1/2 w-[800px] h-[800px] rounded-full bg-[radial-gradient(closest-side,rgba(74,108,247,0.12),transparent)]" />
+      </div>
+
+      <div className="relative mx-auto max-w-[480px] px-4 pt-6 pb-24">
+        <header className="flex items-center justify-between mb-4">
+          <Link to="/" className="flex items-center gap-2">
+            <div className="w-9 h-9 rounded-xl bg-white shadow-sm grid place-items-center border border-white/60">
+              <div className="w-4 h-4 rounded-md bg-[#4A6CF7]" />
+            </div>
+            <div className="text-lg font-semibold">Resell</div>
+          </Link>
+          <Link to="/auth" className="text-sm text-[#4A6CF7] flex items-center gap-1">
+            Sign in <ArrowRight size={16} />
+          </Link>
+        </header>
+
+        <Routes>
+          <Route index element={<Onboarding hero={<Spline scene="https://prod.spline.design/41MGRk-UDPKO-l6W/scene.splinecode" style={{ width: '100%', height: '100%' }} />} />} />
+          <Route path="auth" element={<Auth />} />
+          <Route path="home" element={<MobileShell><HomeFeed /></MobileShell>} />
+          <Route path="product/:id" element={<MobileShell><ProductDetail /></MobileShell>} />
+          <Route path="sell" element={<MobileShell><SellItem /></MobileShell>} />
+          <Route path="chat" element={<MobileShell><Chat /></MobileShell>} />
+          <Route path="orders" element={<MobileShell><Orders /></MobileShell>} />
+          <Route path="profile" element={<MobileShell><Profile /></MobileShell>} />
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
+      </div>
+
+      <div className="fixed bottom-4 left-0 right-0 px-4">
+        <BottomNav />
+      </div>
+    </div>
+  )
+}
